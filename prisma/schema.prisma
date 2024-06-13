@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+//classe
+model Usuario {
+  //@id chave primária
+  id        Int @id @default(autoincrement())
+  nome      String @db.VarChar(200)
+  idade     DateTime @map("idade") @db.Date
+  email     String @unique @map("email") @db.VarChar(200)
+  password  String  @map("senha") @db.VarChar(200)
+  github    String? @map("github") @db.VarChar(200)   
+
+  //titulo lá no banco nome de tabela
+  @@map("usuarios")
+}
+
+model Produto {
+  id                Int @id @default(autoincrement())
+  descricao         String @db.VarChar(200)
+  valor             Decimal @map("valor") @db.Decimal(8,2)
+  quantidadeEstoque Int @map("quantidade_estoque") @db.Integer
+  tipoDoProduto     String @map("tipo do produto") @db.VarChar(200)
+  dataCriacao       DateTime  @default(now()) @map("data_criacao")
+  disponivel        Boolean?  @default(true) @map("disponivel")
+
+  @@map("produtos")
+}
+
+model Loja {
+  //@id chave primária
+  cnpj               String    @id @db.VarChar(20)
+  nome               String    @db.VarChar(200)
+  segmento           String?   @default("alimentação") @db.VarChar(100)
+  endereco           String    @db.VarChar(200)
+  telefone           String?   @db.VarChar(15)
+  quantidadeFiliais  Int       @map("quantidade_filiais") @db.Integer
+  dataAbertura       DateTime  @map("data_abertura")
+
+  @@map("lojas")
+}
+
+model Fornecedor {
+  id                Int       @id @default(autoincrement())
+  nome              String    @db.VarChar(200)
+  email             String    @db.VarChar(200)
+  avaliacao         Int       @db.Integer
+  dataCriacao       DateTime  @default(now()) @map("data_criacao")
+  dataAtualizacao   DateTime  @updatedAt @default(now()) @map("data_atualizacao")   
+
+  @@map("fornecedores")
+}
